@@ -1,0 +1,27 @@
+service: api-gateway
+plugins:
+  - serverless-localstack
+provider:
+    name: aws
+    runtime: go1.x
+    stage: ${opt:stage, 'local'}
+    region: us-east-2
+custom:
+  localstack:
+    debug: true
+    stages:
+      # list of stages for which the plugin should be enabled
+      - local
+    host: http://localhost  # optional  
+package:
+  exclude:
+    - ./**
+  include:
+    - ./bin/**
+functions:
+  hello:
+    handler: bin/main
+    events:
+      - http:
+          path: hello
+          method: get

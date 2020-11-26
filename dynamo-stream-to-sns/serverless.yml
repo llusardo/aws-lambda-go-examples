@@ -1,0 +1,26 @@
+service: dynamo-stream-to-sns-lambda
+plugins:
+  - serverless-localstack
+provider:
+    name: aws
+    runtime: go1.x
+    stage: ${opt:stage, 'local'}
+    region: us-east-2
+    deploymentBucket:
+      name: deployment-bucket
+    SNS_TOPIC: arn:aws:sns:us-east-1:000000000000:ExampleTopic
+custom:
+  localstack:
+    debug: true
+    stages:
+      # list of stages for which the plugin should be enabled
+      - local
+    host: http://localhost  # optional
+package:
+  exclude:
+    - ./**
+  include:
+    - ./bin/**
+functions:
+  dynamo-stream-to-sns-lambda:
+    handler: bin/main
